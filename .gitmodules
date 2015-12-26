@@ -1,0 +1,12 @@
+[submodule "MyTown2"]
+	path = MyTown2
+	url = https://github.com/MyEssentials/MyTown2.git
+[submodule "MyEssentials-Core"]
+	path = MyEssentials-Core
+	url = https://github.com/MyEssentials/MyEssentials-Core.git
+[submodule "MyPermissions"]
+	path = MyPermissions
+	url = https://github.com/MyEssentials/MyPermissions.git
+[submodule "ProtectMyPlane"]
+	path = ProtectMyPlane
+	url = https://github.com/joserobjr/ProtectMyPlane.git
