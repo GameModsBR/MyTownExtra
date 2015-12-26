@@ -1,6 +1,6 @@
 [
 {
-  "modid": "mytownextra",
+  "modid": "MyTownExtra",
   "name": "MyTown Extra",
   "description": "",
   "version": "${version}",
@@ -11,6 +11,7 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "requiredMods": ["MyTown2"],
+  "dependencies": ["ProtectMyPlane", "MyTown2", "universalcoins"]
 }
 ]

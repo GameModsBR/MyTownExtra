@@ -51,6 +51,7 @@ repositories {
 dependencies {
     compile project(':MyTown2')
     compile project(':ProtectMyPlane')
+    compile project(':UniversalCoinsServer')
 }
 
 processResources {
