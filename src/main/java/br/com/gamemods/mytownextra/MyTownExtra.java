@@ -7,7 +7,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = "MyTownExtra", name="MyTown Extra", version = "1.0-SNAPSHOT",
-    dependencies = "after:ProtectMyPlane;required-after:MyTown2;after:universalcoins"
+    dependencies = "after:ProtectMyPlane;required-after:MyTown2;after:universalcoins",
+    acceptableRemoteVersions = "*"
 )
 public class MyTownExtra
 {
