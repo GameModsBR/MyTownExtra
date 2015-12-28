@@ -54,12 +54,14 @@ dependencies {
     compile project(':UniversalCoinsServer')
 }
 
+/*
 jar {
     manifest {
         attributes 'FMLCorePlugin': 'br.com.gamemods.mytownextra.MyTownExtraCore',
                 'FMLCorePluginContainsFMLMod': 'true'
     }
 }
+*/
 
 task deobfJar(type: Jar, dependsOn: 'sourceMainJava') { // Generate deobfuscated
     from sourceSets.main.output

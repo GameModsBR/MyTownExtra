@@ -14,7 +14,7 @@ public class MyTownExtraCore implements IFMLLoadingPlugin
     public String[] getASMTransformerClass()
     {
         return new String[]{
-            "br.com.gamemods.mytownextra.classtransformer.ae2.ToolNetworkToolCT"
+            //"br.com.gamemods.mytownextra.classtransformer.ae2.ToolNetworkToolCT" -- Moved to MyTown2
         };
     }
 

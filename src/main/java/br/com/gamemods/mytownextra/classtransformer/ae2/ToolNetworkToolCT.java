@@ -9,6 +9,10 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.GeneratorAdapter;
 
+/**
+ * @deprecated Moved to MyTown2
+ */
+@Deprecated
 public class ToolNetworkToolCT implements IClassTransformer
 {
     public static boolean onBlockActivated(Block block, World world, int x, int y, int z, EntityPlayer player, int side,
