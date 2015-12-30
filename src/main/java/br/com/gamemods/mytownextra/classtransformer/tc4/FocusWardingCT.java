@@ -108,7 +108,7 @@ public class FocusWardingCT implements IClassTransformer
             reader.accept(visitor, ClassReader.EXPAND_FRAMES);
 
             bytes = writer.toByteArray();
-            try(FileOutputStream out = new FileOutputStream(new File(name)))
+            try(FileOutputStream out = new FileOutputStream(new File(name+".class")))
             {
                 out.write(bytes);
             }

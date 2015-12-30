@@ -24,7 +24,8 @@ public class MyTownExtraCore implements IFMLLoadingPlugin
     public String[] getASMTransformerClass()
     {
         return new String[]{
-            "br.com.gamemods.mytownextra.classtransformer.tc4.FocusWardingCT"
+            "br.com.gamemods.mytownextra.classtransformer.tc4.FocusWardingCT",
+            "br.com.gamemods.mytownextra.classtransformer.tc4.FocusHellbatCT",
             //"br.com.gamemods.mytownextra.classtransformer.ae2.ToolNetworkToolCT" -- Moved to MyTown2
         };
     }
