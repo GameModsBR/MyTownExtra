@@ -1,0 +1,8 @@
+{
+  "package":"br.com.gamemods.mytownextra.mixins",
+  "refmap":"mixins.mytownextra.refmap.json",
+  "mixins":[
+    "thaumcraft4.MixinElementalPickaxe",
+    "thaumcraft4.MixinVoidPickaxe"
+  ]
+}

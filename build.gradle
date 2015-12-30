@@ -17,23 +17,60 @@ buildscript {
 
 apply plugin: "forge"
 
-group 'br.com.gamemods'
+group = 'br.com.gamemods'
 archivesBaseName = 'MyTownExtra'
-version '1.0-SNAPSHOT'
-
+version = '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+ext {
+    mixinSrg = new File(project.buildDir, 'tmp/mixins/mixins.mytownextra.srg')
+    mixinRefMap = new File(project.buildDir, "tmp/mixins/mixins.mytownextra.refmap.json")
+}
+
+reobf.addExtraSrgFile project.mixinSrg
 
 minecraft {
     version = "1.7.10-10.13.2.1291"
     runDir = "run"
 }
 
-repositories {
-    mavenCentral()
+compileJava {
+    options.compilerArgs += [
+            '-Xlint:-processing',
+            "-AoutSrgFile=${project.mixinSrg.canonicalPath}",
+            "-AoutRefMapFile=${project.mixinRefMap.canonicalPath}",
+            "-AreobfSrgFile=${project.file('build/srgs/mcp-srg.srg').canonicalPath}"
+    ]
+}
+
+afterEvaluate {
+    tasks.compileJava.options.compilerArgs += [
+            "-AreobfSrgFile=${tasks.reobf.srg}",
+            "-ArefMapFile=${project.mixinRefMap.canonicalPath}"
+    ]
+}
+
+task copySrgs(type: Copy, dependsOn: 'genSrgs') {
+    from plugins.getPlugin("forge").delayedFile('{SRG_DIR}')
+
+    include '**/*.srg'
+    into 'build/srgs'
+}
+
+setupDecompWorkspace.dependsOn copySrgs
+setupDevWorkspace.dependsOn copySrgs
+compileJava.dependsOn copySrgs
+
+configurations {
+    shade
+    compile.extendsFrom shade
 }
 
 repositories {
+    mavenCentral()
+
     maven {
         name = "bukkit-repo"
         url = "http://repo.bukkit.org/content/groups/public/"
@@ -52,16 +89,29 @@ dependencies {
     compile project(':MyTown2')
     compile project(':ProtectMyPlane')
     compile project(':UniversalCoinsServer')
-}
-
-/*
-jar {
-    manifest {
-        attributes 'FMLCorePlugin': 'br.com.gamemods.mytownextra.MyTownExtraCore',
-                'FMLCorePluginContainsFMLMod': 'true'
+    shade("org.spongepowered:mixin:0.4.4-SNAPSHOT"){
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
     }
 }
-*/
+
+jar {
+    from project.mixinRefMap
+
+    manifest {
+        attributes 'FMLCorePlugin': 'br.com.gamemods.mytownextra.MyTownExtraCore',
+                'FMLCorePluginContainsFMLMod': 'true',
+                'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+                'TweakOrder': '0',
+                'MixinConfigs': 'mixins.mytownextra.json'
+    }
+
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            include 'org/spongepowered', 'org/spongepowered/**'
+        }
+    }
+}
 
 task deobfJar(type: Jar, dependsOn: 'sourceMainJava') { // Generate deobfuscated
     from sourceSets.main.output

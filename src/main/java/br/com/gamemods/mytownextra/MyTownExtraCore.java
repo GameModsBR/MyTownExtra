@@ -1,6 +1,8 @@
 package br.com.gamemods.mytownextra;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.util.Map;
 
@@ -10,6 +12,14 @@ import java.util.Map;
 @IFMLLoadingPlugin.SortingIndex(1001)
 public class MyTownExtraCore implements IFMLLoadingPlugin
 {
+    public MyTownExtraCore()
+    {
+        MixinBootstrap.init();
+
+        MixinEnvironment.getDefaultEnvironment()
+                .addConfiguration("mixins.mytownextra.json");
+    }
+
     @Override
     public String[] getASMTransformerClass()
     {
