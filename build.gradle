@@ -21,8 +21,8 @@ group = 'br.com.gamemods'
 archivesBaseName = 'MyTownExtra'
 version = '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 ext {
     mixinSrg = new File(project.buildDir, 'tmp/mixins/mixins.mytownextra.srg')
@@ -70,7 +70,7 @@ configurations {
 
 repositories {
     mavenCentral()
-
+    mavenLocal()
     maven {
         name = "bukkit-repo"
         url = "http://repo.bukkit.org/content/groups/public/"
@@ -82,6 +82,10 @@ repositories {
     maven {
         name = "sk89q"
         url = "http://maven.sk89q.com/artifactory/repo/"
+    }
+    maven {
+        name = "spigot-repo"
+        url = "https://hub.spigotmc.org/nexus/content/groups/public/"
     }
 }
 
