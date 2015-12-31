@@ -3,6 +3,7 @@
   "refmap":"mixins.mytownextra.refmap.json",
   "mixins":[
     "thaumcraft4.MixinElementalPickaxe",
-    "thaumcraft4.MixinVoidPickaxe"
+    "thaumcraft4.MixinVoidPickaxe",
+    "thaumcraft4.MixinBlockHole"
   ]
 }
