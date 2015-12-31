@@ -4,9 +4,14 @@ import mytown.entities.Resident;
 import mytown.entities.flag.FlagType;
 import mytown.new_datasource.MyTownUniverse;
 import mytown.protection.ProtectionManager;
+import mytown.protection.segment.Segment;
+import mytown.protection.segment.SegmentEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import org.objectweb.asm.*;
@@ -14,6 +19,7 @@ import org.objectweb.asm.commons.GeneratorAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 public class FocusPortableHoleCT implements IClassTransformer
 {
@@ -30,8 +36,40 @@ public class FocusPortableHoleCT implements IClassTransformer
         if(holeOwner == null)
             return false;
         Resident resident = MyTownUniverse.instance.getOrMakeResident(holeOwner);
-        return ProtectionManager.hasPermission(resident, FlagType.ACTIVATE, world.provider.dimensionId, x, y, z)
+        boolean perms =  ProtectionManager.hasPermission(resident, FlagType.ACTIVATE, world.provider.dimensionId, x, y, z)
             && ProtectionManager.hasPermission(resident, FlagType.ENTER, world.provider.dimensionId, x, y, z);
+
+        if(!perms)
+            return false;
+
+        @SuppressWarnings("unchecked")
+        List<Entity> entityList =
+            world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(x-2,y-1,z-2,x+3,y+2,z+3));
+
+        for(Entity entity: entityList)
+        {
+            for(SegmentEntity segment: ProtectionManager.segmentsEntity.get(entity.getClass()))
+            {
+                if(!segment.shouldInteract(entity, resident))
+                {
+                    resident.protectionDenial(FlagType.PVE);
+                    return false;
+                }
+            }
+        }
+
+        //noinspection unchecked
+        entityList =
+                world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x-1,y+1,z-1,x+2,y+2,z+2));
+
+        for(Entity entity: entityList)
+        {
+            if(!entity.getPersistentID().equals(resident.getUUID()) && entity.posY >= y+1
+                    && !ProtectionManager.hasPermission(resident, FlagType.PVP, entity.worldObj.provider.dimensionId, (int)entity.posX, (int)entity.posY, (int)entity.posZ))
+                return false;
+        }
+
+        return true;
     }
 
     private class RightClickGenerator extends GeneratorAdapter
