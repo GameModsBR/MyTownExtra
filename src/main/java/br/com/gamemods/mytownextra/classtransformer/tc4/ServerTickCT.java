@@ -3,7 +3,8 @@ package br.com.gamemods.mytownextra.classtransformer.tc4;
 import mytown.protection.ProtectionHandlers;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.BlockSnapshot;
@@ -43,6 +44,9 @@ public class ServerTickCT implements IClassTransformer
             interactEvent.setCanceled(true);
             return interactEvent;
         }
+
+        if(target == null)
+            return interactEvent;
 
         ItemBlock item = (ItemBlock) target.getItem();
         BlockSnapshot snapshot = new BlockSnapshot(world, x, y, z, item.field_150939_a, item.getMetadata(target.getItemDamage()));
