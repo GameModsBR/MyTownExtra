@@ -147,6 +147,7 @@ public class UniversalCoinsServerEconomy implements IEconManager, Operator
                 return false;
 
             UniversalCoinsServerAPI.takeCoinsReturningChange(scanResult, amountToSubtract, onlinePlayer);
+            return true;
         }
 
         try
