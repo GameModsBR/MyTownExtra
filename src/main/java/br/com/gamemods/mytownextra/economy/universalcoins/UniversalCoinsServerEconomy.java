@@ -88,7 +88,31 @@ public class UniversalCoinsServerEconomy implements IEconManager, Operator
     {
         EntityPlayer onlinePlayer = getOnlinePlayer();
         if(onlinePlayer != null)
-            return UniversalCoinsServerAPI.scanCoins(onlinePlayer.inventory).getCoins();
+        {
+            int balance = 0;
+            for(ItemStack stack: onlinePlayer.inventory.mainInventory)
+            {
+                if(stack != null && (stack.getItem() instanceof ItemCard))
+                {
+                    if(UniversalCoinsServerAPI.canCardBeUsedBy(stack, onlinePlayer))
+                    {
+                        AccountAddress address = UniversalCoinsServerAPI.getAddress(stack);
+                        if(address == null) continue;
+                        try
+                        {
+                            balance += UniversalCoinsServer.cardDb.getAccountBalance(address);
+                            break;
+                        }
+                        catch (DataStoreException | AccountNotFoundException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            return balance + UniversalCoinsServerAPI.scanCoins(onlinePlayer.inventory).getCoins();
+        }
 
         try
         {
@@ -111,7 +135,7 @@ public class UniversalCoinsServerEconomy implements IEconManager, Operator
         {
             for(ItemStack stack: onlinePlayer.inventory.mainInventory)
             {
-                if(stack != null && stack.getItem() instanceof ItemCard)
+                if(stack != null && (stack.getItem() instanceof ItemCard))
                 {
                     if(UniversalCoinsServerAPI.canCardBeUsedBy(stack, onlinePlayer))
                     {
@@ -129,15 +153,10 @@ public class UniversalCoinsServerEconomy implements IEconManager, Operator
                                 return true;
                             }
                         }
-                        catch (DataStoreException e)
+                        catch (DataStoreException | OutOfCoinsException | AccountNotFoundException e)
                         {
                             e.printStackTrace();
                         }
-                        catch (AccountNotFoundException ignored)
-                        {}
-                        catch (OutOfCoinsException ignored)
-                        {}
-
                     }
                 }
             }
